@@ -1,3 +1,6 @@
+// load up the user model
+var User = require('../app/models/user');
+
 module.exports = function(app, passport) {
 
 	// =====================================
@@ -50,6 +53,25 @@ module.exports = function(app, passport) {
 		res.render('profile.ejs', {
 			user : req.user // get the user out of session and pass to template
 		});
+	});
+
+	app.post('/edit-profile', function(req, res) {
+		/*User.findOne({ _id :  req.user._id }, function(err, user) {
+			user.local.fullname : req.body.fullname
+			//console.log(user.local.email);
+			//console.log(req.body.fullname);
+			res.redirect('/profile');
+		});*/
+
+		User.findById(req.user._id, function (err, doc) {
+		  doc.local.fullname = req.body.fullname;
+		  res.redirect('/profile');
+		})
+
+		/*User.findAndModify({
+		    query: { _id :  req.user._id },
+		    update: { 'local.fullname' : req.body.fullname }
+		})*/
 	});
 
 	// =====================================
